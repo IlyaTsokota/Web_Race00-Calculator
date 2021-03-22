@@ -11,6 +11,7 @@ class Calculator {
 		answerSelector,
 		scrollFieldSelector,
 		historyContainer,
+		plusMinusSelector
 	}) {
 		this.container = document.querySelector(containerSelector);
 		this.operations = this.getOperations(operationsSelector);
@@ -36,15 +37,47 @@ class Calculator {
 		this.equalBtn.addEventListener('click', () => this.addHistory(`${this.input.value}=${this.answer.textContent}`));
 		this.bindEventAdditionalOperations();
 		this.memoryValue = 0;
+		this.plusMinusBtn = this.container.querySelector(plusMinusSelector);
+		this.plusMinusBtn.addEventListener('click', () => this.plusMinusChange(this.input.value));
+	}
+
+	plusMinusChange(str) {
+		let val = '',
+			length = 0;
+		for (let i = str.length - 1; i >= 0; i--) {
+			if (!this.isStandardOperation(str[i])) {
+				length++;
+			} else {
+				val = str[i];
+				break;
+			}
+		}
+		console.log(str.substring(str.length - length - 1, str.length));
+		const secondChapter = val === '*' || val === '/' || val === '%' ? +str.substring(str.length - length, str.length) * -1 : +str.substring(str.length - length - 1, str.length) * -1;
+		if (val === '*' || val === '/' || val === '%') {
+			if (secondChapter < 0) {
+				this.input.value = str.substring(0, str.length - length) + secondChapter;
+			} else {
+				this.input.value = str.substring(0, str.length - length )+ '+' +  secondChapter 
+			}
+		} else {
+			if (secondChapter < 0) {
+				this.input.value = str.substring(0, str.length - length - 1) + secondChapter;
+			} else {
+				this.input.value = str.substring(0, str.length - length - 1) + '+' + secondChapter;
+			}
+		}
+
+
+		this.autosizeInput();
+		this.scrollToBottomScrollField();
+		this.parseStringCalculation(this.input.value);
 	}
 
 	parseStringCalculation(str) {
-		// const operands = str.split(this.standardOperationPattern).filter(item => item !== ''),
-		// 	operations = str.split('').filter(char => this.isStandardOperation(char));
-		// let res = 0n;
-		// console.log(operands);
 		let calc = new MathCalc(),
-			expr = calc.parse(str);
+			expr = calc.parse(str),
+			res = 0;
 		expr.scope.fac = function (n) {
 			let result = n;
 			if (n < 0) {
@@ -60,14 +93,6 @@ class Calculator {
 				return result;
 			}
 		};
-		// operands.forEach((item, i) => {
-		// 	if (i === 0) {
-		// 		res = this.operationFromOperand(item);
-		// 	} else {
-		// 		res = this.performingStandardOperations(res, this.operationFromOperand(item), operations[i - 1]);
-		// 	}
-		// });
-		let res = 0;
 		if (!expr.error) {
 			res = expr.eval();
 			if (!isNaN(parseFloat(res))) {
@@ -232,8 +257,7 @@ class Calculator {
 						this.input.value = this.input.value + addValue;
 					}
 				}
-				if (length >= 0 && this.isStandardOperation(addValue) && this.isStandardOperation(currValue[length])
-				) {
+				if (length >= 0 && this.isStandardOperation(addValue) && this.isStandardOperation(currValue[length])) {
 					this.deleteOneChar();
 					this.input.value = this.input.value + addValue;
 				} else {
@@ -341,7 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		inputSelector: '.calculator__current-calculation',
 		answerSelector: '.calculator__answer',
 		scrollFieldSelector: '.calculator__field',
-		historyContainer: '.history'
+		historyContainer: '.history',
+		plusMinusSelector: '#plus-minus'
 	});
 
 	btnHiddenMenuOpen.addEventListener('click', (e) => {
@@ -363,6 +388,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			defaultTab(i);
 		});
 	});
+
 	function defaultTab(i) {
 		navMenuTabs.forEach(el => {
 			el.parentElement.classList.remove('calculator__list-item--active');
@@ -449,5 +475,3 @@ function switchTheme(item, classActive) {
 		img.src = "./icons/sun.png";
 	}
 }
-
-
