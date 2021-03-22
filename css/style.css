@@ -109,7 +109,11 @@ main {
 }
 
 
-
+.dark-theme body,
+.dark-theme main,
+.dark-theme .calculator {
+	background-color: #283637;
+}
 
 .calculator {
 	padding: 40px 0;
@@ -131,8 +135,14 @@ main {
 	margin: 0 auto;
 	background-color: #283637;
 	position: relative;
+	min-height: 659px;
 }
 
+.dark-theme .calculator__inner {
+	-webkit-box-shadow: 0px 0px 32px 0px rgba(255, 255, 255, 0.67);
+	-moz-box-shadow: 0px 0px 32px 0px rgba(255, 255, 255, 0.67);
+	box-shadow: 0px 0px 32px 0px rgba(255, 255, 255, 0.67);
+}
 
 
 .calculator__top {
@@ -141,7 +151,7 @@ main {
 	padding-top: 15px;
 }
 
-.dark-theme * {
+.dark-theme .container * {
 	background-color: #fff;
 }
 
@@ -239,12 +249,11 @@ main {
 	height: 200px;
 	display: flex;
 	flex-direction: column;
-	align-items: end;
+	align-items: flex-end;
 	padding: 0 25px;
 	-ms-overflow-style: none;
-	/* IE 10+ */
 	scrollbar-width: none;
-	/* Firefox */
+	text-align: right;
 }
 
 .calculator__field::-webkit-scrollbar {
@@ -258,7 +267,6 @@ main {
 .calculator__field-history {}
 
 .history {
-	height: 60%;
 	display: flex;
 	flex-direction: column;
 	align-items: end;
@@ -276,12 +284,16 @@ main {
 }
 
 .calculator__current-calculation {
-	font-size: 30px;
-	color: rgba(255, 255, 255, 1);
-	overflow-wrap: anywhere;
-	word-wrap: anywhere;
+	overflow: hidden;
+	background: transparent;
+	color: #fff;
+	border-radius: 10px;
+	width: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+	resize: none;
 	text-align: right;
-	user-select: none;
+	font-size: 35px;
+	min-height: 35px;
 }
 
 .dark-theme .calculator__current-calculation {
@@ -293,7 +305,9 @@ main {
 	font-size: 45px;
 	font-weight: 800;
 	color: #009788;
-	white-space: nowrap;
+	word-wrap: anywhere;
+	overflow-wrap: anywhere;
+
 }
 
 #clear {
@@ -318,6 +332,7 @@ main {
 }
 
 .calculator__operation {
+	user-select: none;
 	cursor: pointer;
 	height: 55px;
 	border-radius: 50%;
@@ -460,6 +475,10 @@ main {
 
 }
 
+.dark-theme .hidden-menu__item {
+	color: #000;
+}
+
 .dark-theme .hidden-menu__item img {
 	background-color: transparent;
 }
@@ -477,4 +496,117 @@ main {
 
 .dark-theme .hidden-menu__close img {
 	background-color: transparent;
+}
+
+
+
+.converter {}
+
+.converter__items {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 15px;
+	justify-content: space-between;
+}
+
+.converter__item,
+.dark-theme .converter__item {
+	-webkit-box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.67);
+	-moz-box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.67);
+	box-shadow: 0px 0px 5px 0px rgba(255, 255, 255, 0.67);
+	flex: 0 0 48%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	font-size: 25px;
+	text-align: center;
+	background-color: #009788;
+	padding: 5px;
+	margin-top: 10px;
+	border-radius: 25px;
+	user-select: none;
+	cursor: pointer;
+	transition: 0.3s all;
+}
+
+.converter__item:hover {
+	opacity: 0.7;
+}
+
+
+.converter__body {
+	display: none;
+}
+
+@keyframes fade {
+	from {
+		opacity: 0.3;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+.converter__body--active {
+	display: block;
+	animation-name: fade;
+	animation-duration: 0.3s;
+}
+
+.converter__body-items {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.converter__body-item {
+	display: flex;
+	width: 100%;
+	padding: 15px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.converter__body-text {
+	width: 50%;
+	color: #fff;
+	text-align: center;
+	font-size: 20px;
+}
+
+.dark-theme .converter__body-text {
+	color: #000;
+}
+
+.converter__body-input {
+	width: 45%;
+	padding: 5px 25px;
+	background-color: transparent;
+	color: #009788;
+	text-align: right;
+	border: 1px solid #fff;
+	border-radius: 25px;
+	font-size: 20px;
+	font-weight: 700;
+	text-align: center;
+}
+
+.dark-theme .converter__body-input {
+	border: 1px solid #000;
+}
+
+.converter__body-input:focus {
+	border: 1px solid #009788 !important;
+}
+
+
+
+.converter__body-input::-webkit-outer-spin-button,
+.converter__body-input::-webkit-inner-spin-button {
+	/* display: none; <- Crashes Chrome on hover */
+	-webkit-appearance: none;
+	margin: 0;
+	/* <-- Apparently some margin are still there even though it's hidden */
 }
